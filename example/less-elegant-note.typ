@@ -1,6 +1,6 @@
 // 模板示例。包含模板介绍和一些Typst用法。
 #import "../lib.typ": *
-#import "../third-lib-config/ctheorems.typ": * //theorem,definition,example,proof
+#import "../utils/third-lib-config/ctheorems.typ": * //theorem,definition,example,proof
 
 #let (
   // 布局
