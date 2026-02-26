@@ -82,7 +82,7 @@
   }
 
   show raw: it => {
-    set text(font: 字体.等宽) // size: 字号.五号
+    set text(font: 字体.楷体,size: 字号.小五)// size: 字号.五号
     it
   }
 
@@ -181,9 +181,6 @@
     #text(counter(page).display("1"))
   ])
   counter(page).update(1)
-  
-
-  
 
   // 
   it
