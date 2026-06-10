@@ -6,7 +6,7 @@
 本项目有以下特色：
 + 中文友好（支持中文加粗），字体的选择符合常规需求（如正文宋体，标题黑体）。
 + 页面风格极简而不失优雅，参考了[ElegantBook: 优美的 LaTeX 书籍模板](https://github.com/ElegantLaTeX/ElegantBook)的风格。
-+ 数学定理环境支持。导入第三方包，以地呈现数学定理、证明、引理等。
++ 数学定理环境支持。导入第三方包，更好地呈现数学定理、证明、引理等。
 
 **项目效果预览**：
 
@@ -14,7 +14,27 @@
 
 <img src="https://github.com/choglost/LessElegantNote/blob/main/example/images/chinese-example.png" height="400px">  <img src="https://github.com/choglost/LessElegantNote/blob/main/example/images/maths-example.png" height="400px">
 
-## 使用指南(傻瓜版) Mannual
+## 项目结构
+
+```text
+LessElegantNote/
+  lib.typ                 # 模板统一入口
+  layouts/                # 文档、正文、附录布局
+  pages/                  # 封面、目录、字体展示页
+  utils/config.typ        # 全局默认配置
+  utils/heading.typ       # 标题风格和编号规则
+  utils/font-style.typ    # 字体和字号配置
+  utils/                  # 其他常用格式工具
+  third-lib-config/       # 第三方包配置
+  example/                # 示例文档和图片素材
+```
+
+新建笔记时，建议把 `LessElegantNote/` 作为模板文件夹放进自己的笔记仓库，在外层创建自己的 `.typ` 文件并导入 `LessElegantNote/lib.typ`。
+默认参数集中在 `utils/config.typ`，标题编号和标题视觉参数集中在 `utils/heading.typ`，因此日常自定义通常不需要修改 `layouts/` 和 `pages/`。
+
+`example/minimal.typ` 是最小入口示例，`example/appendix.typ` 用于检查附录标题、图表编号和公式编号，`example/less-elegant-note.typ` 是完整展示文档。
+
+## 使用指南 Manual
 1. 下载VS Code并安装 （可以选择System Installer，为Windows系统的所有用户安装）
 https://code.visualstudio.com/Download#
 

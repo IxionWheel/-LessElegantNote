@@ -11,7 +11,9 @@
 #import "layouts/mainmatter.typ": mainmatter
 #import "layouts/appendix.typ": appendix
 // 小工具
-#import "utils/heading.typ": custom-numbering
+#import "utils/config.typ": default-info, defaults
+#import "utils/heading.typ": custom-numbering, heading-styles
+#import "utils/internal.typ": merge-named-info
 #import "utils/font-style.typ": 字体, 字号
 #import "utils/custom-format.typ": *
 
@@ -20,32 +22,28 @@
   info: (:),
 ) = {
   // 默认参数
-  info = (
-    (
-      title: "LessElegantNote：一个Typst笔记模版",
-      author: "choglost",
-      date: datetime.today(),
-      cover-image:none
-    )
-      + info
-  )
+  info = default-info + info
   
   (
     // 将传入参数再导出
     twoside: twoside,
     info: info,
+    config: (
+      defaults: defaults,
+      heading-styles: heading-styles,
+    ),
     // 主设置
     doc: (..args) => {
       doc(
         ..args,
-        info: info + args.named().at("info", default: (:)),
+        info: merge-named-info(info, args),
       )
     },
     // 封面页
     cover: (..args) => {
       elegant-cover(
         twoside: twoside,
-        info: info + args.named().at("info", default: (:)),
+        info: merge-named-info(info, args),
         ..args,
       )
     },
@@ -59,11 +57,11 @@
     mainmatter: (..args) => {
       mainmatter(
         twoside: twoside,
-        info: info + args.named().at("info", default: (:)),
+        info: merge-named-info(info, args),
         ..args,
       )
     },
     // 附录部分
-    appendix: (..args) => { appendix(..args) },
+    appendix: (..args) => { appendix(twoside: twoside, ..args) },
   )
 }

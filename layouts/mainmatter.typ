@@ -6,7 +6,9 @@
 #import "@preview/codly-languages:0.1.1": *
 // 放在其他文件中的小工具
 #import "../utils/font-style.typ": 字体, 字号
-#import "../utils/heading.typ": custom-numbering,get-heading-args
+#import "../utils/config.typ": default-info, mainmatter-defaults
+#import "../utils/internal.typ": array-at, page-number-footer
+#import "../utils/heading.typ": custom-numbering, get-heading-args, skip-next-heading-pagebreak
 
 
 #let mainmatter(
@@ -14,45 +16,25 @@
   twoside: false,
   info: (:),
   // 正文相关
-  text-font: 字体.宋体, // 正文字体
-  text-size: 字号.五号, // 正文字号
-  par-leading: 7pt, // 行距
-  par-spacing: 7pt, // 段间距
-  strong-font: 字体.宋体, // strong类型字体
+  text-font: mainmatter-defaults.text-font, // 正文字体
+  text-size: mainmatter-defaults.text-size, // 正文字号
+  par-leading: mainmatter-defaults.par-leading, // 行距
+  par-spacing: mainmatter-defaults.par-spacing, // 段间距
+  strong-font: mainmatter-defaults.strong-font, // strong类型字体
   // 标题相关
   // style-name: "maths", // 标题类型
 
-  heading-fill: (rgb("#004578"), rgb("#004578"), rgb("#005a9e"), rgb("#005a9e")), // 标题颜色
+  heading-fill: mainmatter-defaults.heading-fill, // 标题颜色
   // 其他参数
-  strong-color: rgb("#106ebe"), // strong类型强调的颜色
+  strong-color: mainmatter-defaults.strong-color, // strong类型强调的颜色
   ..args,
   it,
 ) = {
   // 0.  默认参数
-  // info = (
-  //   (
-  //     // style-name: "maths", // 标题类型
-  //   )
-  //   + info
-  // )
+  info = default-info + info
 
-  let color-blue = (rgb("#004578"), rgb("#005a9e"), rgb("#106ebe"), rgb("#0078d4"), rgb("#2b88d8"))
-
-  let heading-args=get-heading-args(info.style-name)
-
-
-  // 辅助函数
-  let array-at(arr, pos) = {
-    arr.at(calc.min(pos, arr.len()) - 1)
-  }
-
-  let unpairs(pairs) = {
-    let dict = (:)
-    for pair in pairs {
-      dict.insert(..pair)
-    }
-    dict
-  }
+  let heading-style-name = info.at("style-name", default: "maths")
+  let heading-args = get-heading-args(style: heading-style-name)
 
   // 1. 设置文本和段落样式
   // 1.1 普通文本
@@ -77,7 +59,7 @@
   }
 
   show strong: it => {
-    set text(strong-color) // font: strong-font
+    set text(font: strong-font, fill: strong-color)
     it
   }
 
@@ -88,7 +70,7 @@
 
   // 2. 标题
   // 设置标题的编号numbering
-  set heading(numbering: custom-numbering.with(style: info.style-name))
+  set heading(numbering: custom-numbering.with(style: heading-style-name))
 
   // 设置标题的字体、字号、间距
   show heading: it => {
@@ -107,8 +89,11 @@
   }
 
   // 标题居中与自动换页
-  show heading: it => {
-    if (array-at(heading-args.pagebreak, it.level)) {
+  show heading: it => context {
+    let skip-pagebreak = skip-next-heading-pagebreak.get()
+    if skip-pagebreak {
+      skip-next-heading-pagebreak.update(false)
+    } else if (array-at(heading-args.pagebreak, it.level)) {
       // 如果打上了 no-auto-pagebreak 标签，则不自动换页
       if ("label" not in it.fields() or str(it.label) != "no-auto-pagebreak") {
         pagebreak(weak: true)
@@ -175,11 +160,7 @@
   show footnote.entry: set text(font: 字体.宋体, size: 字号.五号)
 
   // 设置页码
-  set page(footer: context [
-    #set align(center)
-    #set text(font: 字体.宋体)
-    #text(counter(page).display("1"))
-  ])
+  set page(footer: page-number-footer(numbering: "1", font: 字体.宋体))
   counter(page).update(1)
 
   // 

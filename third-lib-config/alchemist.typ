@@ -1,6 +1,6 @@
 #import "@preview/alchemist:0.1.8": *
 
-#skeletize({
+#let alchemist-demo = skeletize({
   // Your molecule here
   // import cetz.draw: *
   fragment(name: "A", "A")

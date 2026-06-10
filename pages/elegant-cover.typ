@@ -1,6 +1,8 @@
 // 封面页
 
 #import "../utils/font-style.typ": 字号, 字体
+#import "../utils/config.typ": default-info
+#import "../utils/internal.typ": title-lines
 
 #let elegant-cover(
   // documentclass 传入的参数
@@ -9,12 +11,7 @@
   // datetime-display: datetime-display,
 ) = {
   // 1.  默认参数
-  info = (
-    title: ("LessElegantNote：Typst笔记模版"),
-    author: "Choglost",
-    date: datetime.today(),
-    cover-image: none,
-  ) + info
+  info = default-info + info
 
   // 2.  对参数进行处理
   // 处理提交日期
@@ -22,9 +19,7 @@
     info.date = info.date.display("[year]/[month]/[day]")
   }
   // // 如果是字符串，则使用换行符将标题分隔为列表
-  if type(info.title) == str {
-    info.title = info.title.split("\n")
-  }
+  info.title = title-lines(info.title)
 
   // 3.  正式渲染
   // 双面打印模式

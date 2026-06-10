@@ -1,18 +1,3 @@
-/*
-Example
-#import "@preview/quick-maths:0.2.1": shorthands
-
-#show: shorthands.with(
-  ($+-$, $plus.minus$),
-  ($|-$, math.tack),
-  ($<=$, math.arrow.l.double) // Replaces '≤'
-)
-
-$ x^2 = 9 quad <==> quad x = +-3 $
-$ A or B |- A $
-$ x <= y $
-*/
-
 #import "@preview/quick-maths:0.2.1": shorthands
 
 // Shorthand for vectors
@@ -43,10 +28,3 @@ $ x <= y $
   ($<=$, math.arrow.l.double), // '≤'
   ($|>$,math.arrow.r.bar)
 )
-
-$ x^2 = 9 quad <==> quad x = +- 3 $
-$ A or B |- A $
-
-$va + vb +a$
-
-$dd(x,y)$
